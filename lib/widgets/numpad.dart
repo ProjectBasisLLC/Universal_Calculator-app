@@ -8,6 +8,7 @@ class Numpad extends StatelessWidget {
   final bool showDecimal;
   final String? activeUnit;
   final void Function(String)? onUnit;
+  final VoidCallback? onPlusMinus;
 
   const Numpad({
     super.key,
@@ -18,6 +19,7 @@ class Numpad extends StatelessWidget {
     this.showDecimal = false,
     this.activeUnit,
     this.onUnit,
+    this.onPlusMinus,
   });
 
   @override
@@ -114,7 +116,15 @@ class Numpad extends StatelessWidget {
                 : empty(),
             num('0'),
             empty(),
-            empty(),
+            onPlusMinus != null
+                ? _Btn(
+                    label: '±',
+                    onTap: onPlusMinus!,
+                    bg: theme.colorScheme.surfaceContainerHighest,
+                    fg: theme.colorScheme.onSurface,
+                    fontSize: 20,
+                  )
+                : empty(),
           ]),
         ],
       ),

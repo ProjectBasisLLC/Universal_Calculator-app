@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'screens/app_shell.dart';
 
-void main() => runApp(const TimeCalculatorApp());
+void main() => runApp(const UniversalCalculatorApp());
 
-class TimeCalculatorApp extends StatelessWidget {
-  const TimeCalculatorApp({super.key});
+class UniversalCalculatorApp extends StatelessWidget {
+  const UniversalCalculatorApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Time Calculator',
+      title: 'Universal Calculator',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -25,7 +25,7 @@ class TimeCalculatorApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const AppShell(),
     );
   }
 }

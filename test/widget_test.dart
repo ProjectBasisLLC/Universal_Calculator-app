@@ -3,7 +3,7 @@ import 'package:time_calculator/main.dart';
 
 void main() {
   testWidgets('App launches smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const TimeCalculatorApp());
-    expect(find.text('Time Calculator'), findsOneWidget);
+    await tester.pumpWidget(const UniversalCalculatorApp());
+    expect(find.text('Time'), findsOneWidget);
   });
 }
