@@ -3,6 +3,7 @@ import 'add_subtract_screen.dart';
 import 'multiply_divide_screen.dart';
 import 'convert_screen.dart';
 import 'time_diff_screen.dart';
+import 'age_calculator_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _Mode(symbol: '+ / −', title: 'Add / Subtract', icon: Icons.add_circle_outline),
     _Mode(symbol: '× / ÷', title: 'Multiply / Divide', icon: Icons.close),
     _Mode(symbol: '↔', title: 'Convert', icon: Icons.swap_horiz_rounded),
-    _Mode(symbol: 'Δt', title: 'Time Difference', icon: Icons.date_range_outlined),
+    _Mode(symbol: 'Δt', title: 'Time Diff', icon: Icons.date_range_outlined),
+    _Mode(symbol: 'Age', title: 'Age Calc', icon: Icons.cake_outlined),
   ];
 
   @override
@@ -66,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 MultiplyDivideScreen(),
                 ConvertScreen(),
                 TimeDiffScreen(),
+                AgeCalculatorScreen(),
               ],
             ),
           ),

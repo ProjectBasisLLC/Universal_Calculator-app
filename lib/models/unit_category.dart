@@ -14,6 +14,7 @@ class UnitCategory {
   final IconData icon;
   final List<UnitDef> units;
   final bool isTemperature;
+  final bool isFuelEconomy;
 
   const UnitCategory({
     required this.id,
@@ -21,10 +22,12 @@ class UnitCategory {
     required this.icon,
     required this.units,
     this.isTemperature = false,
+    this.isFuelEconomy = false,
   });
 
   double convert(double value, String fromId, String toId) {
     if (isTemperature) return _convertTemp(value, fromId, toId);
+    if (isFuelEconomy) return _convertFuel(value, fromId, toId);
     final from = units.firstWhere((u) => u.id == fromId, orElse: () => units.first);
     final to = units.firstWhere((u) => u.id == toId, orElse: () => units.first);
     return value * from.toBase / to.toBase;
@@ -41,6 +44,23 @@ class UnitCategory {
       'f' => c * 9 / 5 + 32,
       'k' => c + 273.15,
       _ => c,
+    };
+  }
+
+  // Base unit: km/L. L/100km uses inverse relationship.
+  static double _convertFuel(double value, String from, String to) {
+    if (from == to) return value;
+    final kmL = switch (from) {
+      'l100km' => value == 0 ? 0.0 : 100 / value,
+      'mpg_us'  => value * 0.425144,
+      'mpg_uk'  => value * 0.354006,
+      _         => value, // kml
+    };
+    return switch (to) {
+      'l100km' => kmL == 0 ? 0.0 : 100 / kmL,
+      'mpg_us'  => kmL / 0.425144,
+      'mpg_uk'  => kmL / 0.354006,
+      _         => kmL,
     };
   }
 }
@@ -168,5 +188,75 @@ const kCategories = <UnitCategory>[
     label: 'Tip',
     icon: Icons.receipt_outlined,
     units: [],
+  ),
+  UnitCategory(
+    id: 'pressure',
+    label: 'Pressure',
+    icon: Icons.compress,
+    units: [
+      UnitDef(id: 'pa',   label: 'Pascals',      symbol: 'Pa',   toBase: 1),
+      UnitDef(id: 'hpa',  label: 'Hectopascals', symbol: 'hPa',  toBase: 100),
+      UnitDef(id: 'kpa',  label: 'Kilopascals',  symbol: 'kPa',  toBase: 1000),
+      UnitDef(id: 'mpa',  label: 'Megapascals',  symbol: 'MPa',  toBase: 1e6),
+      UnitDef(id: 'bar',  label: 'Bar',          symbol: 'bar',  toBase: 100000),
+      UnitDef(id: 'mbar', label: 'Millibar',     symbol: 'mbar', toBase: 100),
+      UnitDef(id: 'psi',  label: 'PSI',          symbol: 'psi',  toBase: 6894.76),
+      UnitDef(id: 'atm',  label: 'Atmospheres',  symbol: 'atm',  toBase: 101325),
+      UnitDef(id: 'mmhg', label: 'mmHg (Torr)',  symbol: 'mmHg', toBase: 133.322),
+      UnitDef(id: 'inhg', label: 'inHg',         symbol: 'inHg', toBase: 3386.39),
+    ],
+  ),
+  UnitCategory(
+    id: 'energy',
+    label: 'Energy',
+    icon: Icons.electric_bolt,
+    units: [
+      UnitDef(id: 'j',    label: 'Joules',       symbol: 'J',    toBase: 1),
+      UnitDef(id: 'kj',   label: 'Kilojoules',   symbol: 'kJ',   toBase: 1000),
+      UnitDef(id: 'mj',   label: 'Megajoules',   symbol: 'MJ',   toBase: 1e6),
+      UnitDef(id: 'cal',  label: 'Calories',     symbol: 'cal',  toBase: 4.184),
+      UnitDef(id: 'kcal', label: 'Kilocalories', symbol: 'kcal', toBase: 4184),
+      UnitDef(id: 'wh',   label: 'Watt-hours',   symbol: 'Wh',   toBase: 3600),
+      UnitDef(id: 'kwh',  label: 'Kilowatt-hrs', symbol: 'kWh',  toBase: 3600000),
+      UnitDef(id: 'btu',  label: 'BTU',          symbol: 'BTU',  toBase: 1055.06),
+      UnitDef(id: 'ftlb', label: 'Foot-pounds',  symbol: 'ft·lb',toBase: 1.35582),
+      UnitDef(id: 'ev',   label: 'Electronvolts',symbol: 'eV',   toBase: 1.60218e-19),
+    ],
+  ),
+  UnitCategory(
+    id: 'power',
+    label: 'Power',
+    icon: Icons.power,
+    units: [
+      UnitDef(id: 'w',    label: 'Watts',        symbol: 'W',    toBase: 1),
+      UnitDef(id: 'kw',   label: 'Kilowatts',    symbol: 'kW',   toBase: 1000),
+      UnitDef(id: 'mw',   label: 'Megawatts',    symbol: 'MW',   toBase: 1e6),
+      UnitDef(id: 'hp',   label: 'Horsepower',   symbol: 'hp',   toBase: 745.7),
+      UnitDef(id: 'btuh', label: 'BTU/hour',     symbol: 'BTU/h',toBase: 0.293071),
+    ],
+  ),
+  UnitCategory(
+    id: 'fuel',
+    label: 'Fuel Economy',
+    icon: Icons.local_gas_station,
+    isFuelEconomy: true,
+    units: [
+      UnitDef(id: 'kml',    label: 'km per Liter',  symbol: 'km/L',    toBase: 1),
+      UnitDef(id: 'mpg_us', label: 'MPG (US)',       symbol: 'mpg',     toBase: 0.425144),
+      UnitDef(id: 'mpg_uk', label: 'MPG (UK)',       symbol: 'mpg(UK)', toBase: 0.354006),
+      UnitDef(id: 'l100km', label: 'L per 100 km',  symbol: 'L/100km', toBase: 0),
+    ],
+  ),
+  UnitCategory(
+    id: 'angle',
+    label: 'Angle',
+    icon: Icons.rotate_right,
+    units: [
+      UnitDef(id: 'deg',    label: 'Degrees',     symbol: '°',    toBase: 1),
+      UnitDef(id: 'rad',    label: 'Radians',     symbol: 'rad',  toBase: 57.29578),
+      UnitDef(id: 'grad',   label: 'Gradians',    symbol: 'grad', toBase: 0.9),
+      UnitDef(id: 'arcmin', label: 'Arc Minutes', symbol: '\'',   toBase: 1 / 60),
+      UnitDef(id: 'arcsec', label: 'Arc Seconds', symbol: '"',    toBase: 1 / 3600),
+    ],
   ),
 ];

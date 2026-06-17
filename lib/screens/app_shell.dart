@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'calculator_screen.dart';
 import 'unit_converter_home.dart';
 
 class AppShell extends StatefulWidget {
@@ -18,6 +19,7 @@ class _AppShellState extends State<AppShell> {
         index: _tab,
         children: const [
           HomeScreen(),
+          CalculatorScreen(),
           UnitConverterHome(),
         ],
       ),
@@ -29,6 +31,11 @@ class _AppShellState extends State<AppShell> {
             icon: Icon(Icons.timer_outlined),
             selectedIcon: Icon(Icons.timer),
             label: 'Time',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.calculate_outlined),
+            selectedIcon: Icon(Icons.calculate),
+            label: 'Calculate',
           ),
           NavigationDestination(
             icon: Icon(Icons.swap_horiz_outlined),

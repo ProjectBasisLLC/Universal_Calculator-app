@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/unit_category.dart';
 import '../widgets/numpad.dart';
 
@@ -132,17 +133,26 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
           // Input display
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Text(
-                '${_negative ? '−' : ''}$_input',
-                textAlign: TextAlign.right,
-                style: theme.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600),
+            child: GestureDetector(
+              onLongPress: () {
+                final text = '${_negative ? '-' : ''}$_input';
+                Clipboard.setData(ClipboardData(text: text));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Copied'), duration: Duration(seconds: 1)),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Text(
+                  '${_negative ? '−' : ''}$_input',
+                  textAlign: TextAlign.right,
+                  style: theme.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600),
+                ),
               ),
             ),
           ),
@@ -186,7 +196,17 @@ class _ResultRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
+    return GestureDetector(
+      onLongPress: () {
+        Clipboard.setData(ClipboardData(text: value));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Copied $value $symbol'),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      },
+      child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
@@ -215,6 +235,7 @@ class _ResultRow extends StatelessWidget {
             style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
+      ),
       ),
     );
   }
