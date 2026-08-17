@@ -65,6 +65,53 @@ class UnitCategory {
   }
 }
 
+/// Battery capacity conversion (mAh/Ah/C are *charge*, Wh/kWh/J are *energy*).
+/// Crossing domains requires a voltage: energy(J) = charge(C) * voltage(V).
+/// This can't be expressed as a fixed toBase ratio like the other categories,
+/// so it's handled separately (see BatteryScreen) instead of via UnitCategory.convert.
+enum BatteryDomain { charge, energy }
+
+class BatteryUnitDef {
+  final String id;
+  final String label;
+  final String symbol;
+  final BatteryDomain domain;
+  final double toBase; // charge -> Coulombs, energy -> Joules
+  const BatteryUnitDef({
+    required this.id,
+    required this.label,
+    required this.symbol,
+    required this.domain,
+    required this.toBase,
+  });
+}
+
+const kBatteryUnits = <BatteryUnitDef>[
+  BatteryUnitDef(id: 'mah', label: 'Milliamp-hours', symbol: 'mAh', domain: BatteryDomain.charge, toBase: 3.6),
+  BatteryUnitDef(id: 'ah',  label: 'Amp-hours',       symbol: 'Ah',  domain: BatteryDomain.charge, toBase: 3600),
+  BatteryUnitDef(id: 'c',   label: 'Coulombs',        symbol: 'C',   domain: BatteryDomain.charge, toBase: 1),
+  BatteryUnitDef(id: 'wh',  label: 'Watt-hours',      symbol: 'Wh',  domain: BatteryDomain.energy, toBase: 3600),
+  BatteryUnitDef(id: 'kwh', label: 'Kilowatt-hours',  symbol: 'kWh', domain: BatteryDomain.energy, toBase: 3600000),
+  BatteryUnitDef(id: 'j',   label: 'Joules',          symbol: 'J',   domain: BatteryDomain.energy, toBase: 1),
+];
+
+double convertBattery(double value, String fromId, String toId, double voltage) {
+  final from = kBatteryUnits.firstWhere((u) => u.id == fromId, orElse: () => kBatteryUnits.first);
+  final to = kBatteryUnits.firstWhere((u) => u.id == toId, orElse: () => kBatteryUnits.first);
+  if (from.domain == to.domain) {
+    return value * from.toBase / to.toBase;
+  }
+  if (from.domain == BatteryDomain.charge) {
+    final coulombs = value * from.toBase;
+    final joules = coulombs * voltage;
+    return joules / to.toBase;
+  } else {
+    final joules = value * from.toBase;
+    final coulombs = voltage == 0 ? 0.0 : joules / voltage;
+    return coulombs / to.toBase;
+  }
+}
+
 const kCategories = <UnitCategory>[
   UnitCategory(
     id: 'length',
@@ -234,6 +281,43 @@ const kCategories = <UnitCategory>[
       UnitDef(id: 'hp',   label: 'Horsepower',   symbol: 'hp',   toBase: 745.7),
       UnitDef(id: 'btuh', label: 'BTU/hour',     symbol: 'BTU/h',toBase: 0.293071),
     ],
+  ),
+  UnitCategory(
+    id: 'voltage',
+    label: 'Voltage',
+    icon: Icons.bolt,
+    units: [
+      UnitDef(id: 'mv', label: 'Millivolts', symbol: 'mV', toBase: 0.001),
+      UnitDef(id: 'v',  label: 'Volts',      symbol: 'V',  toBase: 1),
+      UnitDef(id: 'kv', label: 'Kilovolts',  symbol: 'kV', toBase: 1000),
+    ],
+  ),
+  UnitCategory(
+    id: 'current',
+    label: 'Current',
+    icon: Icons.electric_meter,
+    units: [
+      UnitDef(id: 'ua', label: 'Microamps', symbol: 'µA', toBase: 1e-6),
+      UnitDef(id: 'ma', label: 'Milliamps', symbol: 'mA', toBase: 0.001),
+      UnitDef(id: 'a',  label: 'Amps',      symbol: 'A',  toBase: 1),
+      UnitDef(id: 'ka', label: 'Kiloamps',  symbol: 'kA', toBase: 1000),
+    ],
+  ),
+  UnitCategory(
+    id: 'resistance',
+    label: 'Resistance',
+    icon: Icons.electrical_services,
+    units: [
+      UnitDef(id: 'ohm',  label: 'Ohms',      symbol: 'Ω',  toBase: 1),
+      UnitDef(id: 'kohm', label: 'Kilohms',   symbol: 'kΩ', toBase: 1000),
+      UnitDef(id: 'mohm', label: 'Megohms',   symbol: 'MΩ', toBase: 1e6),
+    ],
+  ),
+  UnitCategory(
+    id: 'battery',
+    label: 'Battery',
+    icon: Icons.battery_charging_full,
+    units: [], // handled by BatteryScreen (needs a voltage to cross charge<->energy)
   ),
   UnitCategory(
     id: 'fuel',

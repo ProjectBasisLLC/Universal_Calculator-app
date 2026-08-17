@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/unit_category.dart';
 import 'unit_converter_screen.dart';
 import 'tip_screen.dart';
+import 'battery_screen.dart';
 
 class UnitConverterHome extends StatelessWidget {
   const UnitConverterHome({super.key});
@@ -39,6 +40,8 @@ class UnitConverterHome extends StatelessWidget {
             onTap: () {
               if (cat.id == 'tip') {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const TipScreen()));
+              } else if (cat.id == 'battery') {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const BatteryScreen()));
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => UnitConverterScreen(category: cat)));
               }
