@@ -49,23 +49,23 @@ class Numpad extends StatelessWidget {
               child: Row(
                 children: ['d', 'h', 'm', 's'].map((u) {
                   final isActive = activeUnit == u;
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: _Btn(
-                        label: u.toUpperCase(),
-                        onTap: () => onUnit!(u),
-                        bg: isActive
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.secondaryContainer,
-                        fg: isActive
-                            ? theme.colorScheme.onPrimary
-                            : theme.colorScheme.onSecondaryContainer,
-                        height: 40,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                  // _Btn already wraps itself in Expanded+Padding (like every other
+                  // button below) -- adding another Expanded/Padding here double-nests
+                  // Expanded inside a Padding, which throws "Incorrect use of
+                  // ParentDataWidget" since Expanded's immediate render-tree parent
+                  // ends up being a RenderPadding instead of the Row.
+                  return _Btn(
+                    label: u.toUpperCase(),
+                    onTap: () => onUnit!(u),
+                    bg: isActive
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.secondaryContainer,
+                    fg: isActive
+                        ? theme.colorScheme.onPrimary
+                        : theme.colorScheme.onSecondaryContainer,
+                    height: 40,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
                   );
                 }).toList(),
               ),
