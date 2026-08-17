@@ -1,11 +1,11 @@
 {
-    "name": "time_calculator",
-    "short_name": "time_calculator",
+    "name": "R4T.io",
+    "short_name": "R4T.io",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "R4T.io — time math, a standard calculator, and a unit converter in one app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

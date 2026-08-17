@@ -1,11 +1,16 @@
-# Universal Calculator — App Info
+# R4T.io — App Info
 
-A Flutter app (originally "Time Calculator") providing time math, a standard calculator,
-and a unit converter in one three-tab shell. Targets Android, iOS, web, Windows, macOS, and Linux.
+A Flutter app (marketed as **R4T.io**, formerly "Universal Calculator" / "Time Calculator")
+providing time math, a standard calculator, and a unit converter in one three-tab shell.
+Targets Android, iOS, web, Windows, macOS, and Linux.
 
-- Package name: `time_calculator` (pubspec, unchanged from original project)
-- App/root widget: `UniversalCalculatorApp`
+- Package name: `r4t_io_app` (pubspec)
+- App/root widget: `R4TIoApp`
 - Version: 1.0.0+1
+- Platform application/bundle identifiers (Android `applicationId`, iOS/macOS bundle ID, Linux
+  `APPLICATION_ID`) were deliberately **left as `com.projectbasis.time_calculator`** during the
+  2026-08-17 rename pass — changing those changes the app's identity on every store/platform, so
+  that's a separate decision from renaming the package, widget, and display names.
 
 ## Navigation
 

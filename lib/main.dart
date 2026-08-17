@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'screens/app_shell.dart';
 
-void main() => runApp(const UniversalCalculatorApp());
+void main() => runApp(const R4TIoApp());
 
-class UniversalCalculatorApp extends StatelessWidget {
-  const UniversalCalculatorApp({super.key});
+class R4TIoApp extends StatelessWidget {
+  const R4TIoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Universal Calculator',
+      title: 'R4T.io',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

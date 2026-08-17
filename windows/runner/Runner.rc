@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.projectbasis" "\0"
-            VALUE "FileDescription", "time_calculator" "\0"
+            VALUE "FileDescription", "R4T.io" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "time_calculator" "\0"
+            VALUE "InternalName", "r4t_io" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.projectbasis. All rights reserved." "\0"
-            VALUE "OriginalFilename", "time_calculator.exe" "\0"
-            VALUE "ProductName", "time_calculator" "\0"
+            VALUE "OriginalFilename", "r4t_io.exe" "\0"
+            VALUE "ProductName", "R4T.io" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

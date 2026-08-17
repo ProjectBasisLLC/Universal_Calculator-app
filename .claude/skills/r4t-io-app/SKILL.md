@@ -15,13 +15,17 @@ description: >-
 # R4T.io — App Reference
 
 A Flutter app (marketed as **R4T.io**, formerly "Universal Calculator" / "Time Calculator";
-package `time_calculator`, root widget `UniversalCalculatorApp`) with three tabs: Time,
-Calculate, Convert. Targets Android, iOS, web, Windows, macOS, Linux.
+package `r4t_io_app`, root widget `R4TIoApp`) with three tabs: Time, Calculate, Convert.
+Targets Android, iOS, web, Windows, macOS, Linux.
 
-> Naming note: the pubspec package name (`time_calculator`) and root widget
-> (`UniversalCalculatorApp`) haven't been renamed to match the new brand yet — flag this if
-> you're doing a full rebrand pass through the code, since the app-store listing name and
-> in-code identifiers are currently out of sync.
+> Naming note (updated 2026-08-17): the pubspec package name, root widget, README, and every
+> platform's *display* name (Android label, iOS/macOS bundle name, web manifest, Windows/Linux
+> window title) were renamed to R4T.io. The Android `applicationId`, iOS/macOS bundle
+> identifier, and Linux `APPLICATION_ID` were deliberately left as
+> `com.projectbasis.time_calculator` — those are the app's unique identity on each
+> store/platform, and changing them is a separate, much higher-stakes decision than renaming
+> the package/display name (it makes updates land as a new app, not an update, for any existing
+> install). Flag this distinction if asked to finish the identifier rename.
 
 Use this skill to orient quickly in the codebase before making changes, and to follow the
 app's existing conventions when adding features rather than inventing new patterns.
