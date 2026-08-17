@@ -42,7 +42,7 @@ in `lib/models/unit_category.dart`. Tapping a category opens either the generic
 unit, long-press-to-copy) or a dedicated screen for categories that don't fit that model
 (Tip, Battery).
 
-### Converter categories (18)
+### Converter categories (20)
 
 | Category | Units | Notes |
 |---|---|---|
@@ -64,6 +64,8 @@ unit, long-press-to-copy) or a dedicated screen for categories that don't fit th
 | **Battery** | mAh, Ah, C, Wh, kWh, J | dedicated `BatteryScreen` — see below |
 | Fuel Economy | km/L, MPG (US), MPG (UK), L/100km | non-linear (`_convertFuel`, inverse relation) |
 | Angle | °, rad, grad, arcmin, arcsec | linear |
+| Space | km, light-seconds, light-minutes, AU, light-hours, light-years, parsecs, kiloparsecs, megaparsecs | linear (base: meters) |
+| Atomic | attometers, femtometers, picometers, Bohr radii, angstroms, nanometers | linear (base: meters) |
 
 ### Battery capacity conversion (mAh ↔ Wh, added 2026-08-17)
 
@@ -85,6 +87,20 @@ The conversion table and logic live in `lib/models/unit_category.dart`:
 `BatteryUnitDef`, `kBatteryUnits`, `convertBattery(value, fromId, toId, voltage)`.
 
 Example: 2000 mAh at 3.7 V ⇄ 7.4 Wh.
+
+### Space & Atomic (added 2026-08-17)
+
+Both are ordinary linear `UnitCategory` entries with base unit = meters — no special screen
+needed, just a much wider dynamic range than Length (`_fmt` already switches to scientific
+notation outside ~1e-5–1e12, so both the tiny atomic values and huge astronomical ones display
+sensibly).
+
+- **Space**: km, light-seconds, light-minutes, AU, light-hours, light-years, parsecs,
+  kiloparsecs, megaparsecs. 1 AU = 1.495978707e11 m; 1 ly = 9.4607304725808e15 m;
+  1 pc ≈ 3.0856775815e16 m.
+- **Atomic**: attometers, femtometers, picometers, Bohr radii, angstroms, nanometers.
+  Bohr radius (a₀) = 5.29177210903e-11 m — the natural atomic unit of length, included
+  alongside the plain metric prefixes since it's how atomic radii are usually expressed.
 
 ## Shared conversion model
 
